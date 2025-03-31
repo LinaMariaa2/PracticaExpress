@@ -1,31 +1,18 @@
-import express from 'express'; // importa el modulo
+import express from 'express';
+import pool from './config/db'; // Importamos la conexión
+
 const app = express();
-const port = 3000;
+const port = process.env.PORT || 3000;
 
-app.get('/', (req, res) => {
-    res.send("hola mundo que t");
+app.get('/test-db', async (req, res) => {
+    try {
+        const result = await pool.query('SELECT NOW()');
+        res.json({ success: true, time: result.rows[0] });
+    } catch (error) {
+        res.status(500).json({ success: false, error });
+    }
 });
 
-app.get('/lina', (req, res) => {
-    res.send("hola tu");
-});
-
-app.get('/invernaderos', (req, res) => {
-    const invernaderos = [
-        { id: 1, nombre: 'Invernadero Norte' },
-        { id: 2, nombre: 'Invernadero Sur' }
-    ];
-    res.json(invernaderos);
-});
-
-app.get('/invernaderos/:id/zonas', (req, res) => {
-    const zonas = [
-        { id: 1, nombre: 'Zona 1', cultivo: 'Tomates' },
-        { id: 2, nombre: 'Zona 2', cultivo: 'Lechugas' }
-    ];
-    res.json(zonas);
-});
-
-app.listen(port, () =>{
-    console.log(`Servidor escuchando en el puerto ${port}`)
+app.listen(port, () => {
+    console.log(`✅ Servidor escuchando en el puerto ${port}`);
 });
