@@ -6,10 +6,12 @@
       "target": "ESNext",
       "moduleResolution": "NodeNext",
       "module": "NodeNext",
-      "strict": false,
+      "strict": true,
       "sourceMap": true,
       "esModuleInterop": true,
-      "declaration": true
+      "declaration": true,
+      "experimentalDecorators": true, //habilita decoradores experimentados
+      "emitDecoratorMetadata": true // habilitametadatos de decoraciones
     },
     "include": ["src/**/*.ts"]
 }
