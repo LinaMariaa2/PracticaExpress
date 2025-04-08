@@ -1,7 +1,8 @@
 import express from 'express';
 import pool from '../config/db'; // Asegúrate de que el archivo db.ts está bien configurado
+import router from '../routes/router'
+import supabase from '../supabase'
 
-import colors from 'colors';
 
 const app = express();
 const port = 3000; // Puerto del servidor Express
@@ -13,13 +14,12 @@ app.use(express.json());
 
 app.get('/', async (req, res) => {
     try {
-      const result = await pool.query('SELECT * FROM tbl_programacion_riego LIMIT 5;');
+      const {data, error} = await supabase.from('tbl_persona').select('*').limit(2);
+      if(error) throw error;
+      console.log('🔍 Datos obtenidos:', data); // Muestra los datos en la terminal
+      res.json(data);
       
-      console.log('🔍 Datos obtenidos:', result.rows); // Muestra los datos en la terminal
-      res.json(result.rows);
-      console.log(colors.green.bold('✅ Conexión exitosa a la BD'));
     } catch (err) {
-      console.log(colors.red.bold('❌ Conexión fallida a la BD'));
       console.error('❌ Error en la consulta:', err);
       res.status(500).send('Error en la base de datos');
     }
